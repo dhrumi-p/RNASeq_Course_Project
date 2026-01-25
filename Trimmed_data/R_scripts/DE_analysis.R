@@ -249,6 +249,54 @@ p4 <- plot_top_genes(res_WTvsDKO_infected, "WT vs DKO (Infected)")
 (p1 | p2) /
   (p3 | p4)
 
+# --------------------------------------------------------------- #
+# WT: Infected vs Control
+# remove NA padj values first
+res_WT_sig <- res_WT[!is.na(res_WT$padj), ]
+
+# significant upregulated genes
+WT_up <- res_WT_sig[
+  res_WT_sig$padj < 0.05 & res_WT_sig$log2FoldChange > 0,
+]
+
+# significant downregulated genes
+WT_down <- res_WT_sig[
+  res_WT_sig$padj < 0.05 & res_WT_sig$log2FoldChange < 0,
+]
+
+# how many?
+nrow(WT_up) # 4186
+nrow(WT_down) # 5712
+
+WT_up <- WT_up[WT_up$log2FoldChange > 1, ]    
+# 2197
+WT_down <- WT_down[WT_down$log2FoldChange < -1, ]
+# 4602
+
+# DKO: Infected vs Control
+res_DKO_sig <- res_DKO[!is.na(res_DKO$padj), ]
+
+DKO_up <- res_DKO_sig[
+  res_DKO_sig$padj < 0.05 & res_DKO_sig$log2FoldChange > 0,
+]
+
+DKO_down <- res_DKO_sig[
+  res_DKO_sig$padj < 0.05 & res_DKO_sig$log2FoldChange < 0,
+]
+
+nrow(DKO_up) # 3800
+nrow(DKO_down) # 4272
+
+DKO_up <- DKO_up[DKO_up$log2FoldChange > 1, ]
+# 2449
+DKO_down <- DKO_down[DKO_down$log2FoldChange < -1, ]
+# 2975
+
+write.csv(as.data.frame(WT_up),   "WT_upregulated.csv")
+write.csv(as.data.frame(WT_down), "WT_downregulated.csv")
+
+write.csv(as.data.frame(DKO_up),   "DKO_upregulated.csv")
+write.csv(as.data.frame(DKO_down), "DKO_downregulated.csv")
 
 
 # --------------------------------------------------------------- #
